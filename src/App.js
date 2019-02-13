@@ -1,25 +1,111 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
+import "./App.css";
+import SearchBar from "./component/SearchBar";
+import NewTask from "./component/NewTask";
+import Header from "./component/Header";
+import List from "./component/List";
+import Button from "./component/Button";
 
 class App extends Component {
+  state = {
+    tasks: [],
+    task: "",
+    search: ""
+  };
+
+  componentDidMount = async () => {
+    const tasks = await axios
+      .get("http://localhost:3000/")
+      .then(response => response.data.tasks);
+
+    this.setState({ tasks: tasks });
+  };
+
+  handleChange = event => {
+    const target = event.target;
+    const value = target.value;
+    this.setState({ task: value });
+  };
+
+  handleAddClick = async () => {
+    const newTask = this.state.task;
+    const tasks = [...this.state.tasks];
+    let isExist = false;
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].task.toLowerCase() === newTask.toLowerCase()) {
+        isExist = true;
+      }
+    }
+
+    if (!isExist) {
+      const createTask = await axios
+        .post("http://localhost:3000/create", { task: newTask })
+        .then(response => response.date);
+    }
+    this.setState({ task: "" });
+  };
+
+  componentDidUpdate = async (prevProps, prevStates) => {
+    const tasks = await axios
+      .get("http://localhost:3000/")
+      .then(response => response.data.tasks);
+
+    if (!this.state.search) {
+      if (tasks !== this.state.tasks) {
+        this.setState({ tasks: tasks });
+      }
+    }
+  };
+
+  handleClick = async task => {
+    let newIsDone = task.isDone;
+
+    newIsDone === true ? (newIsDone = false) : (newIsDone = true);
+    const update = await axios
+      .post("http://localhost:3000/update", { id: task._id, isDone: newIsDone })
+      .then(response => response.date);
+  };
+
+  handleDeleteClick = async task => {
+    console.log(task);
+    const update = await axios
+      .post("http://localhost:3000/delete", { id: task._id })
+      .then(response => response.date);
+  };
+
+  handleChangeSearch = event => {
+    const tasks = [...this.state.tasks];
+    const target = event.target;
+    const searched = target.value;
+    let filtered = tasks;
+
+    if (searched) {
+      filtered = tasks.filter(task =>
+        task.task.toLowerCase().includes(searched.toLowerCase())
+      );
+    }
+
+    this.setState({ search: searched, tasks: filtered });
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="page">
+        <div className="container">
+          <Header />
+          <SearchBar
+            onchange={this.handleChangeSearch}
+            value={this.props.search}
+          />
+          <List
+            tasks={this.state.tasks}
+            onclick={this.handleClick}
+            clickDelete={this.handleDeleteClick}
+          />
+          <NewTask onchange={this.handleChange} value={this.state.task} />
+          <Button onclick={this.handleAddClick} />
+        </div>
       </div>
     );
   }
