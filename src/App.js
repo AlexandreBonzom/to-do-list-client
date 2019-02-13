@@ -16,7 +16,7 @@ class App extends Component {
 
   componentDidMount = async () => {
     const tasks = await axios
-      .get("http://localhost:3000/")
+      .get("https://to-do-list-server-exercice.herokuapp.com/")
       .then(response => response.data.tasks);
 
     this.setState({ tasks: tasks });
@@ -40,7 +40,9 @@ class App extends Component {
 
     if (!isExist) {
       const createTask = await axios
-        .post("http://localhost:3000/create", { task: newTask })
+        .post("https://to-do-list-server-exercice.herokuapp.com/create", {
+          task: newTask
+        })
         .then(response => response.date);
     }
     this.setState({ task: "" });
@@ -48,7 +50,7 @@ class App extends Component {
 
   componentDidUpdate = async (prevProps, prevStates) => {
     const tasks = await axios
-      .get("http://localhost:3000/")
+      .get("https://to-do-list-server-exercice.herokuapp.com/")
       .then(response => response.data.tasks);
 
     if (!this.state.search) {
@@ -63,14 +65,19 @@ class App extends Component {
 
     newIsDone === true ? (newIsDone = false) : (newIsDone = true);
     const update = await axios
-      .post("http://localhost:3000/update", { id: task._id, isDone: newIsDone })
+      .post("https://to-do-list-server-exercice.herokuapp.com/update", {
+        id: task._id,
+        isDone: newIsDone
+      })
       .then(response => response.date);
   };
 
   handleDeleteClick = async task => {
     console.log(task);
     const update = await axios
-      .post("http://localhost:3000/delete", { id: task._id })
+      .post("https://to-do-list-server-exercice.herokuapp.com/delete", {
+        id: task._id
+      })
       .then(response => response.date);
   };
 
