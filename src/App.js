@@ -11,7 +11,8 @@ class App extends Component {
   state = {
     tasks: [],
     task: "",
-    search: ""
+    search: "",
+    isHidden: false
   };
 
   componentDidMount = async () => {
@@ -96,6 +97,14 @@ class App extends Component {
     this.setState({ search: searched, tasks: filtered });
   };
 
+  handleClickHidden = () => {
+    let isHidden = this.state.isHidden;
+
+    isHidden === true ? (isHidden = false) : (isHidden = true);
+
+    this.setState({ isHidden: isHidden });
+  };
+
   render() {
     return (
       <div className="page">
@@ -105,13 +114,20 @@ class App extends Component {
             onchange={this.handleChangeSearch}
             value={this.props.search}
           />
+
           <List
             tasks={this.state.tasks}
             onclick={this.handleClick}
             clickDelete={this.handleDeleteClick}
+            isHidden={this.state.isHidden}
+            clickHide={this.handleClickHidden}
           />
           <NewTask onchange={this.handleChange} value={this.state.task} />
-          <Button onclick={this.handleAddClick} />
+          <Button
+            onclick={this.handleAddClick}
+            label="ajoute une tâche"
+            name="add-task"
+          />
         </div>
       </div>
     );

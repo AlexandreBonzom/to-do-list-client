@@ -29,7 +29,7 @@ input {
   margin-right: 10px;
 }
 
-ul {
+.list-container {
   width: 100%;
   background-color: white;
   min-height: 40vh;
@@ -38,6 +38,9 @@ ul {
   border: 1px solid #3980c3;
   padding: 30px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 li {
@@ -86,12 +89,32 @@ li {
   margin-top: 20px;
 }
 button {
-  text-transform: uppercase;
   font-family: "Arial", cursive;
+  color: black;
+  font-size: 14px;
+  line-height: 14px;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.button .add-task {
+  text-transform: uppercase;
   background-color: #3980c3;
   color: white;
   font-size: 16px;
   line-height: 16px;
   padding: 10px;
-  border-radius: 3px;
+}
+
+.hide-done {
+  color: grey;
+}
+
+.show-hidden {
+  color: black;
+}
+
+.show-hidden i,
+.hide-done i {
+  margin-right: 5px;
 }
