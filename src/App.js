@@ -74,7 +74,6 @@ class App extends Component {
   };
 
   handleDeleteClick = async task => {
-    console.log(task);
     const update = await axios
       .post("https://to-do-list-server-exercice.herokuapp.com/delete", {
         id: task._id
@@ -123,7 +122,7 @@ class App extends Component {
             clickHide={this.handleClickHidden}
           />
           <NewTask onchange={this.handleChange} value={this.state.task} />
-          <Button
+          <ButtonContainer
             onclick={this.handleAddClick}
             label="ajoute une tâche"
             name="add-task"

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class NewTask extends React.Component {
+class NewTask extends Component {
   render() {
     return (
       <div className="newTask">

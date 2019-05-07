@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ButtonHidden from "./ButtonHidden";
-class List extends React.Component {
+
+class List extends Component {
   render() {
     return (
       <div className="list-container">
