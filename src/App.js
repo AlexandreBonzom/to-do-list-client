@@ -122,7 +122,7 @@ class App extends Component {
             clickHide={this.handleClickHidden}
           />
           <NewTask onchange={this.handleChange} value={this.state.task} />
-          <ButtonContainer
+          <Button
             onclick={this.handleAddClick}
             label="ajoute une tâche"
             name="add-task"
