@@ -6,27 +6,18 @@ import NewTask from "./component/NewTask";
 import Header from "./component/Header";
 import List from "./component/List";
 import Button from "./component/Button";
+import { fetchAllTodos } from "./actions/fetch_todos";
+import { connect } from "react-redux";
 
 class App extends Component {
   state = {
-    tasks: [],
     task: "",
     search: "",
     isHidden: false
   };
 
   componentDidMount = async () => {
-    const tasks = await axios
-      .get("https://to-do-list-server-exercice.herokuapp.com/")
-      .then(response => response.data.tasks);
-
-    this.setState({ tasks: tasks });
-  };
-
-  handleChange = event => {
-    const target = event.target;
-    const value = target.value;
-    this.setState({ task: value });
+    this.props.updateTodos();
   };
 
   handleAddClick = async () => {
@@ -40,45 +31,33 @@ class App extends Component {
     }
 
     if (!isExist) {
-      const createTask = await axios
+      await axios
         .post("https://to-do-list-server-exercice.herokuapp.com/create", {
           task: newTask
         })
-        .then(response => response.date);
+        .then(() => this.props.updateTodos());
     }
     this.setState({ task: "" });
-  };
-
-  componentDidUpdate = async (prevProps, prevStates) => {
-    const tasks = await axios
-      .get("https://to-do-list-server-exercice.herokuapp.com/")
-      .then(response => response.data.tasks);
-
-    if (!this.state.search) {
-      if (tasks !== this.state.tasks) {
-        this.setState({ tasks: tasks });
-      }
-    }
   };
 
   handleClick = async task => {
     let newIsDone = task.isDone;
 
     newIsDone === true ? (newIsDone = false) : (newIsDone = true);
-    const update = await axios
+    await axios
       .post("https://to-do-list-server-exercice.herokuapp.com/update", {
         id: task._id,
         isDone: newIsDone
       })
-      .then(response => response.date);
+      .then(() => this.props.updateTodos());
   };
 
   handleDeleteClick = async task => {
-    const update = await axios
+    await axios
       .post("https://to-do-list-server-exercice.herokuapp.com/delete", {
         id: task._id
       })
-      .then(response => response.date);
+      .then(() => this.props.updateTodos());
   };
 
   handleChangeSearch = event => {
@@ -105,6 +84,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.props.todos);
     return (
       <div className="page">
         <div className="container">
@@ -115,22 +95,32 @@ class App extends Component {
           />
 
           <List
-            tasks={this.state.tasks}
+            tasks={this.props.todos}
             onclick={this.handleClick}
             clickDelete={this.handleDeleteClick}
             isHidden={this.state.isHidden}
             clickHide={this.handleClickHidden}
           />
-          <NewTask onchange={this.handleChange} value={this.state.task} />
-          <Button
-            onclick={this.handleAddClick}
-            label="ajoute une tâche"
-            name="add-task"
+          <NewTask
+            todos={this.props.todos}
+            updateTodos={this.props.updateTodos}
           />
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return { todos: state.todos };
+};
+const mapsDispatchtoProps = dispatch => {
+  return { updateTodos: () => dispatch(fetchAllTodos()) };
+};
+
+App = connect(
+  mapStateToProps,
+  mapsDispatchtoProps
+)(App);
 
 export default App;
