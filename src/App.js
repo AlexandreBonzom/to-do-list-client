@@ -11,45 +11,12 @@ import { connect } from "react-redux";
 
 class App extends Component {
   state = {
-    task: "",
     search: "",
     isHidden: false
   };
 
   componentDidMount = async () => {
     this.props.updateTodos();
-  };
-
-  handleAddClick = async () => {
-    const newTask = this.state.task;
-    const tasks = [...this.state.tasks];
-    let isExist = false;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task.toLowerCase() === newTask.toLowerCase()) {
-        isExist = true;
-      }
-    }
-
-    if (!isExist) {
-      await axios
-        .post("https://to-do-list-server-exercice.herokuapp.com/create", {
-          task: newTask
-        })
-        .then(() => this.props.updateTodos());
-    }
-    this.setState({ task: "" });
-  };
-
-  handleClick = async task => {
-    let newIsDone = task.isDone;
-
-    newIsDone === true ? (newIsDone = false) : (newIsDone = true);
-    await axios
-      .post("https://to-do-list-server-exercice.herokuapp.com/update", {
-        id: task._id,
-        isDone: newIsDone
-      })
-      .then(() => this.props.updateTodos());
   };
 
   handleDeleteClick = async task => {
@@ -84,7 +51,7 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.props.todos);
+    console.log("render", this.props.todos);
     return (
       <div className="page">
         <div className="container">
@@ -96,7 +63,7 @@ class App extends Component {
 
           <List
             tasks={this.props.todos}
-            onclick={this.handleClick}
+            updateTodos={this.props.updateTodos}
             clickDelete={this.handleDeleteClick}
             isHidden={this.state.isHidden}
             clickHide={this.handleClickHidden}
