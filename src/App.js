@@ -22,7 +22,7 @@ class App extends Component {
   updateList = () => {
     axios
       .get("https://to-do-list-server-exercice.herokuapp.com/")
-      .then(response => response.data.tasks)
+      .then(response => response.data.tasks, error => console.log(error))
       .then(todos => this.setState({ todos: todos }));
   };
 
@@ -39,7 +39,7 @@ class App extends Component {
         .post("https://to-do-list-server-exercice.herokuapp.com/create", {
           task: newTask
         })
-        .then(() => this.updateList())
+        .then(() => this.updateList(), error => console.log(error))
         .then(() => this.setState({ newTask: "" }));
     }
   };
@@ -50,7 +50,7 @@ class App extends Component {
         id: task._id,
         isDone: !task.isDone
       })
-      .then(() => this.updateList());
+      .then(() => this.updateList(), error => console.log(error));
   };
 
   handleDeleteClick = task => {
@@ -58,7 +58,7 @@ class App extends Component {
       .post("https://to-do-list-server-exercice.herokuapp.com/delete", {
         id: task._id
       })
-      .then(() => this.updateList());
+      .then(() => this.updateList(), error => console.log(error));
   };
 
   handleClickSeeOnlyRemainingTask = () => {
