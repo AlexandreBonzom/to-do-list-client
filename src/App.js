@@ -12,7 +12,7 @@ class App extends Component {
     todos: [],
     newTask: "",
     search: "",
-    isHidden: false
+    onlyRemainingTasks: false
   };
 
   componentDidMount = async () => {
@@ -61,47 +61,33 @@ class App extends Component {
       .then(() => this.updateList());
   };
 
-  handleChangeSearch = event => {
-    const todos = [...this.state.todos];
-    const target = event.target;
-    const searched = target.value;
-    let filtered = todos;
-
-    if (searched) {
-      filtered = todos.filter(task =>
-        task.task.toLowerCase().includes(searched.toLowerCase())
-      );
-    }
-
-    this.setState({ search: searched, todos: filtered });
-  };
-
-  handleClickHidden = () => {
-    const { isHidden } = this.state;
-    this.setState({ isHidden: !isHidden });
+  handleClickSeeOnlyRemainingTask = () => {
+    const { onlyRemainingTasks } = this.state;
+    this.setState({ onlyRemainingTasks: !onlyRemainingTasks });
   };
 
   render() {
-    console.log(this.state);
     return (
       <div className="page">
         <div className="container">
           <Header />
           <SearchBar
-            onchange={this.handleChangeSearch}
-            value={this.props.search}
+            handleInputChange={this.handleInputChange}
+            value={this.state.search}
           />
 
           <List
-            todos={this.state.todos}
-            onclick={this.handleClickOnElement}
+            {...this.state}
+            toggleTask={this.handleClickOnElement}
             clickDelete={this.handleDeleteClick}
-            isHidden={this.state.isHidden}
-            clickHide={this.handleClickHidden}
+            clickHide={this.handleClickSeeOnlyRemainingTask}
           />
-          <NewTask onchange={this.handleInputChange} name={this.state.task} />
+          <NewTask
+            handleInputChange={this.handleInputChange}
+            value={this.state.newTask}
+          />
           <Button
-            onclick={this.handleAddClick}
+            addTodo={this.handleAddClick}
             label="ajoute une tâche"
             name="add-task"
           />

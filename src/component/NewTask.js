@@ -1,19 +1,17 @@
-import React, { Component } from "react";
+import React from "react";
 
-class NewTask extends Component {
-  render() {
-    return (
-      <div className="newTask">
-        <input
-          type="text"
-          value={this.props.value}
-          name="newTask"
-          placeholder="Entrez une nouvelle tâche"
-          onChange={this.props.onchange}
-        />
-      </div>
-    );
-  }
-}
+const NewTask = ({ value, handleInputChange }) => {
+  return (
+    <div className="newTask">
+      <input
+        type="text"
+        value={value}
+        name="newTask"
+        placeholder="Entrez une nouvelle tâche"
+        onChange={handleInputChange}
+      />
+    </div>
+  );
+};
 
 export default NewTask;

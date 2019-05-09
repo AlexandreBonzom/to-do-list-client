@@ -1,34 +1,28 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Button extends Component {
-  renderButton = isHidden => {
-    if (isHidden) {
-      return (
-        <div className="show-hidden">
-          <i class="fas fa-eye" />
-          <span>Montrer les tâches effectuées</span>
-        </div>
-      );
-    } else {
-      return (
-        <div className="hide-done">
-          <i class="fas fa-eye-slash" />
-          <span>Cacher les tâche effectuées</span>
-        </div>
-      );
-    }
-  };
-
-  render() {
-    return (
-      <div className="button">
-        {" "}
-        <button className={this.props.name} onClick={this.props.clickHide}>
-          {this.renderButton(this.props.isHidden)}
-        </button>
+const ButtonHidden = ({ name, clickHide, onlyRemainingTasks }) => {
+  const renderButton = onlyRemainingTasks => {
+    return onlyRemainingTasks ? (
+      <div className="show-hidden">
+        <i className="fas fa-eye" />
+        <span>Montrer les tâches effectuées</span>
+      </div>
+    ) : (
+      <div className="hide-done">
+        <i className="fas fa-eye-slash" />
+        <span>Cacher les tâches effectuées</span>
       </div>
     );
-  }
-}
+  };
 
-export default Button;
+  return (
+    <div className="button">
+      {" "}
+      <button className={name} onClick={clickHide}>
+        {renderButton(onlyRemainingTasks)}
+      </button>
+    </div>
+  );
+};
+
+export default ButtonHidden;
