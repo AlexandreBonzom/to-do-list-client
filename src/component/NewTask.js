@@ -7,6 +7,7 @@ class NewTask extends Component {
         <input
           type="text"
           value={this.props.value}
+          name="newTask"
           placeholder="Entrez une nouvelle tâche"
           onChange={this.props.onchange}
         />

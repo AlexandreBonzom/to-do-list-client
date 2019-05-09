@@ -9,102 +9,80 @@ import Button from "./component/Button";
 
 class App extends Component {
   state = {
-    tasks: [],
-    task: "",
+    todos: [],
+    newTask: "",
     search: "",
     isHidden: false
   };
 
   componentDidMount = async () => {
-    const tasks = await axios
-      .get("https://to-do-list-server-exercice.herokuapp.com/")
-      .then(response => response.data.tasks);
-
-    this.setState({ tasks: tasks });
+    this.updateList();
   };
 
-  handleChange = event => {
-    const target = event.target;
-    const value = target.value;
-    this.setState({ task: value });
+  updateList = () => {
+    axios
+      .get("https://to-do-list-server-exercice.herokuapp.com/")
+      .then(response => response.data.tasks)
+      .then(todos => this.setState({ todos: todos }));
+  };
+
+  handleInputChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleAddClick = async () => {
-    const newTask = this.state.task;
-    const tasks = [...this.state.tasks];
-    let isExist = false;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task.toLowerCase() === newTask.toLowerCase()) {
-        isExist = true;
-      }
-    }
+    const { newTask } = this.state;
+    const todos = [...this.state.todos].map(todo => todo.task.toLowerCase());
 
-    if (!isExist) {
-      const createTask = await axios
+    if (!todos.filter(task => task === newTask.toLowerCase()).length) {
+      axios
         .post("https://to-do-list-server-exercice.herokuapp.com/create", {
           task: newTask
         })
-        .then(response => response.date);
-    }
-    this.setState({ task: "" });
-  };
-
-  componentDidUpdate = async (prevProps, prevStates) => {
-    const tasks = await axios
-      .get("https://to-do-list-server-exercice.herokuapp.com/")
-      .then(response => response.data.tasks);
-
-    if (!this.state.search) {
-      if (tasks !== this.state.tasks) {
-        this.setState({ tasks: tasks });
-      }
+        .then(() => this.updateList())
+        .then(() => this.setState({ newTask: "" }));
     }
   };
 
-  handleClick = async task => {
-    let newIsDone = task.isDone;
-
-    newIsDone === true ? (newIsDone = false) : (newIsDone = true);
-    const update = await axios
+  handleClickOnElement = task => {
+    axios
       .post("https://to-do-list-server-exercice.herokuapp.com/update", {
         id: task._id,
-        isDone: newIsDone
+        isDone: !task.isDone
       })
-      .then(response => response.date);
+      .then(() => this.updateList());
   };
 
-  handleDeleteClick = async task => {
-    const update = await axios
+  handleDeleteClick = task => {
+    axios
       .post("https://to-do-list-server-exercice.herokuapp.com/delete", {
         id: task._id
       })
-      .then(response => response.date);
+      .then(() => this.updateList());
   };
 
   handleChangeSearch = event => {
-    const tasks = [...this.state.tasks];
+    const todos = [...this.state.todos];
     const target = event.target;
     const searched = target.value;
-    let filtered = tasks;
+    let filtered = todos;
 
     if (searched) {
-      filtered = tasks.filter(task =>
+      filtered = todos.filter(task =>
         task.task.toLowerCase().includes(searched.toLowerCase())
       );
     }
 
-    this.setState({ search: searched, tasks: filtered });
+    this.setState({ search: searched, todos: filtered });
   };
 
   handleClickHidden = () => {
-    let isHidden = this.state.isHidden;
-
-    isHidden === true ? (isHidden = false) : (isHidden = true);
-
-    this.setState({ isHidden: isHidden });
+    const { isHidden } = this.state;
+    this.setState({ isHidden: !isHidden });
   };
 
   render() {
+    console.log(this.state);
     return (
       <div className="page">
         <div className="container">
@@ -115,13 +93,13 @@ class App extends Component {
           />
 
           <List
-            tasks={this.state.tasks}
-            onclick={this.handleClick}
+            todos={this.state.todos}
+            onclick={this.handleClickOnElement}
             clickDelete={this.handleDeleteClick}
             isHidden={this.state.isHidden}
             clickHide={this.handleClickHidden}
           />
-          <NewTask onchange={this.handleChange} value={this.state.task} />
+          <NewTask onchange={this.handleInputChange} name={this.state.task} />
           <Button
             onclick={this.handleAddClick}
             label="ajoute une tâche"
