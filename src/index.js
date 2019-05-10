@@ -6,7 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
-import { fetchAllTodos } from "./actions/fetch_todos";
+
 import rootReducers from "./reducers/combinedReducers";
 
 const store = createStore(rootReducers, applyMiddleware(thunk));

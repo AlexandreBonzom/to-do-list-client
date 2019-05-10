@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
+
+import { connect } from "react-redux";
+import { fetchAllTodos } from "../actions/fetch_todos";
+
 class NewTask extends Component {
   state = { newTask: "" };
 
@@ -7,11 +11,15 @@ class NewTask extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault();
     const { newTask } = this.state;
-    if (!this.props.todos.includes(newTask)) {
-      await axios
+    if (
+      !this.props.todos.filter(todo =>
+        todo.task.toLowerCase().includes(newTask.toLowerCase())
+      ).length
+    ) {
+      axios
         .post("https://to-do-list-server-exercice.herokuapp.com/create", {
           task: newTask
         })
@@ -42,4 +50,16 @@ class NewTask extends Component {
   }
 }
 
-export default NewTask;
+const mapStateToProps = state => {
+  return { todos: state.todos };
+};
+const mapsDispatchtoProps = dispatch => {
+  return { updateTodos: () => dispatch(fetchAllTodos()) };
+};
+
+const NewTaskContainer = connect(
+  mapStateToProps,
+  mapsDispatchtoProps
+)(NewTask);
+
+export default NewTaskContainer;
