@@ -1,4 +1,4 @@
-# TO DO LISTS
+# TO DO LIST
 
 The purpose of the to do list is to train to some technologies using this exercise. You will find the same to do list but with different methods or technologies, one for each branch as follow:
 
@@ -30,7 +30,6 @@ or
 
 ```
 yarn install
-
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
@@ -39,7 +38,6 @@ End with an example of getting some data out of the system or using it for a lit
 
 ```
 npm start
-
 ```
 
 ## Demo
