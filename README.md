@@ -4,7 +4,7 @@ The purpose of the to do list is to train to some technologies using this exerci
 
 - master: Basic React
 - Redux: Using React, React-Readux and Redux packages. All the states component used before are replace by Redux store mangement. Because it is a fullstack exercise, async actions are used to get all the todos from the back-end part.
-- React-Hook: Using hooks in react to manipulate state.
+- React-Hook: Using hooks in react to manipulate state. (on-going)
 
 ## Getting Started
 
