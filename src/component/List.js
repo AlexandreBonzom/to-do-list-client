@@ -1,5 +1,6 @@
 import React from "react";
 import ButtonHidden from "./ButtonHidden";
+import PropTypes from "prop-types";
 
 const List = ({
   search,
@@ -52,6 +53,15 @@ const List = ({
       />
     </div>
   );
+};
+
+List.propTypes = {
+  search: PropTypes.string,
+  todos: PropTypes.array.isRequired,
+  onlyRemainingTasks: PropTypes.bool.isRequired,
+  clickDelete: PropTypes.func,
+  clickHide: PropTypes.func,
+  toggleTask: PropTypes.func
 };
 
 export default List;
