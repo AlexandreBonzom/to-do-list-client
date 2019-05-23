@@ -52,3 +52,7 @@ npm start
 ### Server side
 
 [Server with DB](https://github.com/AlexandreBonzom/to-do-list-server) - Back-end of the project. Really simple.
+
+### Last Update
+
+- 23.05.2019: PropTypes added to components
