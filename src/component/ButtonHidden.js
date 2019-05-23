@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const ButtonHidden = ({ name, clickHide, onlyRemainingTasks }) => {
   const renderButton = onlyRemainingTasks => {
@@ -23,6 +24,11 @@ const ButtonHidden = ({ name, clickHide, onlyRemainingTasks }) => {
       </button>
     </div>
   );
+};
+ButtonHidden.propTypes = {
+  name: PropTypes.string,
+  onlyRemainingTasks: PropTypes.bool.isRequired,
+  clickHide: PropTypes.func.isRequired
 };
 
 export default ButtonHidden;

@@ -23,7 +23,9 @@ class App extends Component {
     axios
       .get("https://to-do-list-server-exercice.herokuapp.com/")
       .then(response => response.data.tasks, error => console.log(error))
-      .then(todos => this.setState({ todos: todos }));
+      .then(todos =>
+        todos ? this.setState({ todos: todos }) : this.setState({ todos: [] })
+      );
   };
 
   handleInputChange = event => {
@@ -73,7 +75,7 @@ class App extends Component {
           <Header />
           <SearchBar
             handleInputChange={this.handleInputChange}
-            value={this.state.search}
+            search={this.state.search}
           />
 
           <List

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const NewTask = ({ value, handleInputChange }) => {
   return (
@@ -12,6 +13,11 @@ const NewTask = ({ value, handleInputChange }) => {
       />
     </div>
   );
+};
+
+NewTask.propTypes = {
+  value: PropTypes.string.isRequired,
+  handleInputChange: PropTypes.func.isRequired
 };
 
 export default NewTask;
